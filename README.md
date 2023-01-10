@@ -14,7 +14,7 @@
 
 <!-- ///////////////////////////////////////////////////////////////////////////////////// -->
 
-<BR><BR><BR>
+<BR><BR>
 
 <!-- ///////////////////////////////////////////////////////////////////////////////////// -->
 
@@ -62,19 +62,12 @@
   
 </table>
 
-
-
-
-
-
-
 <BR>
 <!-- ///////////////////////////////////////////////////////////////////////////////////// -->
 <hr>
 <BR>
 
 ## Database design:
-
 
 ### The process starts with registering companies in a market, but we can’t store in the market table all companies ID’s registered in each market, hence in the company we store the market ID where it’s registered.
 
@@ -116,20 +109,91 @@ One session has many transactions, but a transaction doesn’t exist in multiple
 <hr>
 <BR>
 
+## Participation:
+
+<table>
+
+  <tr>
+    <td>COMPANY → MARKET</td>
+    <td>(0,1)</td>
+    <td>A company can register in only one market maximum, but it can also exist without registering in any market.</td>
+  </tr>
+
+  <tr>
+    <td>MARKET → COMPANY</td>
+    <td>(0,n)</td>
+    <td>A market might have none or many companies registered in it.</td>
+  </tr>
+
+  <tr>
+    <td>MARKET → SESSION</td>
+    <td>(0,n)</td>
+    <td>A market might have none or many sessions.</td>
+  </tr>
+
+  <tr>
+    <td>SESSION →  MARKET</td>
+    <td>(1,1)</td>
+    <td>A session strictly have 1 market.</td>
+  </tr>
+
+  <tr>
+    <td>SESSION →  ORDERS</td>
+    <td>(0,n)</td>
+    <td>A session might have none or many orders.</td>
+  </tr>
+
+  <tr>
+    <td>SESSION →  TRANSACTIONS</td>
+    <td>(0,n)</td>
+    <td>A session might have none or many transactions</td>
+  </tr>
+
+  <tr>
+    <td>TRANSACTIONS  → SESSION</td>
+    <td>(1,1)</td>
+    <td>A transaction strictly have 1 session.</td>
+  </tr>
+
+  <tr>
+    <td>ORDERS  → SESSION</td>
+    <td>(1,1)</td>
+    <td>AAn order strictly have 1 session.</td>
+  </tr>
+
+  <tr>
+    <td>ORDERS  → SHAREHOLDER</td>
+    <td>(1,1)</td>
+    <td>An order strictly have 1 shareholder.</td>
+  </tr>
+
+  <tr>
+    <td>SHAREHOLDER  → ORDERS</td>
+    <td>(0,n)</td>
+    <td>A shareholder might have none or many orders.</td>
+  </tr>
+  
+</table>
+
+<BR>
+<!-- ///////////////////////////////////////////////////////////////////////////////////// -->
+<hr>
+<BR>
+
 ## Normalization:
 
 ### ❖ To reach First Normalized Form:
 
-➢	We split shareholder name into first_name & last_name to avoid having columns with composite value. 
-➢	We Eliminated data redundancy.
+➢ We split shareholder name into first_name & last_name to avoid having columns with composite value.
+➢ We Eliminated data redundancy.
 
 ### ❖ To reach Second Normalization Form:
 
-➢	We prevented tables from having multiple primary keys, instead attributes in the tables are dependent on one primary key only.
+➢ We prevented tables from having multiple primary keys, instead attributes in the tables are dependent on one primary key only.
 
 ### ❖ To reach Third Normalized Form:
 
-➢	We prevented unrelated data from being stored together, instead we organized data and connected it through proper relations.
+➢ We prevented unrelated data from being stored together, instead we organized data and connected it through proper relations.
 
 <BR>
 <!-- ///////////////////////////////////////////////////////////////////////////////////// -->
@@ -145,7 +209,6 @@ One session has many transactions, but a transaction doesn’t exist in multiple
 <br>
 
 ### Tables Constraints:
-
 
 #### We used an UPDATE CASCADE for market id so that whenever a market id is changed in the market table all the children tables will inherit the update. In addition we used ON DELETE SET DEFAULT so that whenever a market is deleted the market id in the children tables is set to “NO MARKET” which is the default value.
 
